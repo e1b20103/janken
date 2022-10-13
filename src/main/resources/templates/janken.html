@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/schema/security">
+</htmlxmlns:th>
+
+<head>
+  <meta charset="utf-8">
+  <title>SpringBoot Janken</title>
+</head>
+
+<body>
+  <div><a href="/logout">ログアウト</a></div>
+  <h1>Janken Game!</h1>
+
+  <p>
+    エントリー
+
+  <div th:if="${room}">
+    <ul>
+      <!--roomオブジェクトのroomNoというフィールドを指定している-->
+      <!--eachは所謂for each．この場合roomオブジェクトのusersフィールドにあるすべてのデータを一通り表示する
+        thが指定されているので[]が不要になる-->
+      <li th:each="user : ${room.users}">[[${user}]]</li>
+    </ul>
+  </div>
+  <form action="/janken" method="post">
+    <div th:if="${User}">
+      Hi![[${User}]]
+    </div>
+  </form>
+  <div>
+    <a href="/jankengame/Gu">グー</a>
+    <a href="/jankengame/Cho">チョキ</a>
+    <a href="/jankengame/Pa">パー</a>
+
+  </div>
+  <div th:if="${janResult}">
+    <!--thymeleafを利用してjavaから値を受けるとき，ModelMapの変数名を指定のとおりに囲むと良い-->
+    <!--Pathパラメータ-->
+    <p>あなたの手[[${janhand}]]</p>
+    <p>相手の手 グー</p>
+    <p>結果[[${janResult}]]</p>
+  </div>
+  </p>
+
+
+
+</body>
+
+</html>

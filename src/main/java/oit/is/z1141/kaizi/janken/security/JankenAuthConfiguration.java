@@ -27,15 +27,15 @@ public class JankenAuthConfiguration {
     // UserBuilder usersにユーザ名，パスワード，ロールを指定してbuildする
     // このときパスワードはBCryptでハッシュ化されている．
     // ハッシュ化されたパスワードを得るには，この授業のbashターミナルで下記のように末尾にユーザ名とパスワードを指定すると良い(要VPN)
-    // $ sshrun htpasswd -nbBC 10 user1 p@ss
-    UserDetails user1 = users
-        .username("user1")
-        .password("$2y$10$ngxCDmuVK1TaGchiYQfJ1OAKkd64IH6skGsNw1sLabrTICOHPxC0e")
+    // $ sshrun htpasswd -nbBC 10 ほんだ isdev
+    UserDetails ほんだ = users
+        .username("ほんだ")
+        .password("$2y$10$OC3XOC5IvXm70WKyGGSsFuAEHJcVhwxJdpyP/6eDJeb39GSY6L36C")
         .roles("USER")
         .build();
     UserDetails user2 = users
         .username("user2")
-        .password("$2y$10$ngxCDmuVK1TaGchiYQfJ1OAKkd64IH6skGsNw1sLabrTICOHPxC0e")
+        .password("$2y$10$5Kwdp6pJL/4.9pVrmPIqteUyAf.hGJSWfYCp/SYCJipYVcVM/M7Oi")
         .roles("USER")
         .build();
     UserDetails admin = users
@@ -44,7 +44,7 @@ public class JankenAuthConfiguration {
         .roles("ADMIN")
         .build();
     // 生成したユーザをImMemoryUserDetailsManagerに渡す（いくつでも良い）
-    return new InMemoryUserDetailsManager(user1, user2, admin);
+    return new InMemoryUserDetailsManager(ほんだ, user2, admin);
   }
 
   /**
@@ -63,7 +63,7 @@ public class JankenAuthConfiguration {
     // mvcMatchers().authenticated()がmvcMatchersに指定されたアクセス先に認証処理が必要であることを示す
     // authenticated()の代わりにpermitAll()と書くと認証不要となる
     http.authorizeHttpRequests().mvcMatchers("/janken/**").authenticated();
-        //.mvcMatchers("/sample4/**").authenticated();
+    // .mvcMatchers("/sample4/**").authenticated();
 
     http.logout().logoutSuccessUrl("/"); // ログアウト時は "http://localhost:8000/" に戻る
 

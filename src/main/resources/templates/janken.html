@@ -14,6 +14,14 @@
   <p>
     エントリー
 
+    <div th:each="chamber,stat:${usedata}">
+      <tr>
+        <td>Index:[[${stat.index}]]</td>
+        <td>ID:[[${users.id}]]</td>
+        <td>ユーザ名:[[${users.name}]]</td>
+      </tr>
+    </div>
+
   <div th:if="${room}">
     <ul>
       <!--roomオブジェクトのroomNoというフィールドを指定している-->
@@ -39,8 +47,10 @@
     <p>あなたの手[[${janhand}]]</p>
     <p>相手の手 グー</p>
     <p>結果[[${janResult}]]</p>
+    <a href="/janken">もどる</a>
   </div>
   </p>
+
 
 
 

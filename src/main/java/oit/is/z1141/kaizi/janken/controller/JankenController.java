@@ -2,123 +2,120 @@ package oit.is.z1141.kaizi.janken.controller;
 
 import java.security.Principal;
 import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import oit.is.z1141.kaizi.janken.model.Janken;
-// import oit.is.z1141.kaizi.janken.model.Match;
-// import oit.is.z1141.kaizi.janken.model.MatchMapper;
-// import oit.is.z1141.kaizi.janken.model.User;
-// import oit.is.z1141.kaizi.janken.model.UserMapper;
+import org.springframework.web.bind.annotation.RequestMapping;
+//import oit.is.z1141.kaizi.janken.model.Janken;
+//import oit.is.z1141.kaizi.janken.model.Match;
+//import oit.is.z1141.kaizi.janken.model.MatchMapper;
+import oit.is.z1141.kaizi.janken.model.User;
+import oit.is.z1141.kaizi.janken.model.UserMapper;
+import oit.is.z1141.kaizi.janken.model.Entry;
 
 /**
- * /sample3へのリクエストを扱うクラス authenticateの設定をしていれば， /sample3へのアクセスはすべて認証が必要になる
+ * Sample21Controller
+ * index
+ * クラスの前に@Controllerをつけていると，HTTPリクエスト（GET/POSTなど）があったときに，このクラスが呼び出される
  */
 @Controller
-@RequestMapping("/sample4")
+// @RequestMapping("/janken")
 public class JankenController {
-
   @Autowired
-  //ChamberMapper chamberMapper;
+   private Entry room;
+   UserMapper userMapper;
+  /**
+   * パスパラメータ2つをGETで受け付ける 1つ目の変数をparam1という名前で，2つ目の変数をparam2という名前で受け取る
+   * GETで受け取った2つの変数とsample22()の引数の名前が同じなため， 引数の前に @PathVariable と付けるだけで，パスパラメータの値を
+   * javaで処理できるようになる ModelMapはthymeleafに渡すためのMapと呼ばれるデータ構造を持つ変数
+   * Mapはkeyとvalueの組み合わせで値を保持する
+   * QueryParam にしたら?もできるかも
+   * //@RequestParamを@PathVariableにしたら成功した
+   *
+   * @param hand
+   * @param model
+   * @return
+   *
+   */
 
-  @GetMapping("janken")
-  public String janken() {
+  @GetMapping("/jankengame/{hand}")//戻る
+  public String jankengame(@PathVariable String hand, ModelMap model) {
+    // じゃんけんの実装方法自分の手は無視して1/3にする
+    if (hand.equals("Gu")) {
+      String janResult = "あいこ";
+      model.addAttribute("janResult", janResult);
+      String janhand = "Gu";
+      model.addAttribute("janhand", janhand);
+
+    } else {
+      String janResult = "不明";
+      model.addAttribute("janResult", janResult);
+      String janhand = "不明";
+      model.addAttribute("janhand", janhand);
+    }
+    if (hand.equals("Cho")) {
+      String janResult = "負け";
+      model.addAttribute("janResult", janResult);
+      String janhand = "Cho";
+      model.addAttribute("janhand", janhand);
+
+    }
+    if (hand.equals("Pa")) {
+      String janResult = "勝ち";
+      model.addAttribute("janResult", janResult);
+      String janhand = "Pa";
+      model.addAttribute("janhand", janhand);
+    }
+    // ModelMap型変数のmodelにtasuResult2という名前の変数で，tasuResultの値を登録する．
+    // ここで値を登録するとthymeleafが受け取り，htmlで処理することができるようになる
     return "janken.html";
   }
 
-  @GetMapping("step3")
-  public String sample43() {
-    return "sample43.html";
-  }
-
-  @GetMapping("step4")
-  public String sample44() {
-    return "sample44.html";
-  }
-
-  @GetMapping("step6")
-  public String sample46() {
-    return "sample46.html";
-  }
-
   /**
-   * 指定したidをPATHパラメータで受け取り，そのidに対応するデータを取得して返す
-   *
-   * @param id
+   * @param name
    * @param model
    * @return
    */
-  // @GetMapping("step2/{id}")
-  // public String sample42(@PathVariable Integer id, ModelMap model) {
-  //   Chamber chamber2 = chamberMapper.selectById(id);
-  //   model.addAttribute("chamber2", chamber2);
 
-  //   return "sample41.html";
-  // }
 
-  // /**
-  //  *
-  //  * @param model Thymeleafにわたすデータを保持するオブジェクト
-  //  * @param prin  ログインユーザ情報が保持されるオブジェクト
-  //  * @return
-  //  *
-  //  *         Transactionalはメソッドでトランザクション処理を実施したい場合に付与する
-  //  *         このメソッドが開始するとトランザクションが開始され，メソッドが正常に終了するとDBへのアクセスが確定する（Runtime
-  //  *         errorなどで止まった場合はロールバックが行われる）
-  //  */
-  // @PostMapping("step3")
-  // @Transactional
-  // public String sample43(@RequestParam String chamberName, ModelMap model, Principal prin) {
-  //   String loginUser = prin.getName(); // ログインユーザ情報
-  //   Chamber chamber3 = new Chamber();
-  //   chamber3.setChamberName(chamberName);
-  //   chamber3.setUserName(loginUser);
-  //   chamberMapper.insertChamber(chamber3);
-  //   model.addAttribute("chamber3", chamber3);
-  //   // System.out.println("ID:" + chamber3.getId());
-  //   return "sample43.html";
-  // }
+  @GetMapping("/janken")
+  public String janken( Principal prin, ModelMap model) {
+    String loginUser = prin.getName();
+    Entry newRoom = new Entry();
+    newRoom.addUser(loginUser);
+    this.room.addUser(loginUser);
+    model.addAttribute("room", this.room);
+    model.addAttribute("new_room", newRoom);
 
-  // @PostMapping("step5")
-  // public String sample45(@RequestParam String chamberName, ModelMap model) {
-  //   ArrayList<Chamber> chambers5 = chamberMapper.selectAllByChamberName(chamberName);
-  //   model.addAttribute("chambers5", chambers5);
-  //   return "sample44.html";
-  // }
 
-  // @GetMapping("step7")
-  // @Transactional
-  // public String sample47(ModelMap model) {
-  //   ArrayList<ChamberUser> chamberUsers7 = chamberMapper.selectAllChamberUser();
-  //   model.addAttribute("chamberUsers7", chamberUsers7);
-  //   return "sample46.html";
-  // }
+    return "janken.html";
+  }
 
-  // @PostMapping("step8")
-  // @Transactional
-  // public String sample48(@RequestParam Double height, @RequestParam Integer age, ModelMap model, Principal prin) {
-  //   String loginUser = prin.getName(); // ログインユーザ情報
-  //   UserInfo ui = new UserInfo();
-  //   ui.setUserName(loginUser);
-  //   ui.setAge(age);
-  //   ui.setHeight(height);
-  //   try {
-  //     chamberMapper.insertUserInfo(ui);
-  //   } catch (RuntimeException e) {// 既に身長が登録されているユーザでさらに登録しようとすると実行時例外が発生するので，コンソールに出力してinsertをSkipする
-  //     System.out.println("Exception:" + e.getMessage());
-  //   }
-  //   // insert後にすべての身長が登録されているユーザを取得する
-  //   ArrayList<ChamberUser> chamberUsers7 = chamberMapper.selectAllChamberUser();
-  //   model.addAttribute("chamberUsers7", chamberUsers7);
-  //   return "sample46.html";
-  // }
+  @PostMapping("/janken")
+  public String janken(String name,Principal prin, ModelMap model) {
+  String loginUser = prin.getName();
+  Entry newRoom = new Entry();
+  newRoom.addUser(loginUser);
+  this.room.addUser(loginUser);
+  model.addAttribute("room", this.room);
+  model.addAttribute("new_room", newRoom);
+
+  ArrayList<User> userdata = userMapper.selectAllByname(name);
+  model.addAttribute("user", userdata);
+
+
+
+
+
+  return "janken.html";
+  }
+
+
 
 }

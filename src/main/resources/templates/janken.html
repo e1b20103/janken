@@ -13,23 +13,41 @@
 
   <p>
     エントリー
+  <form action="/janken" method="post">
+    <div th:if="${room}">
+      <ul>
+        <div th:if="${User}">
+          Hi![[${User}]]
+        </div>
+  </form>
+  <li th:each="user : ${room.users}">[[${user}]]</li>
+<li th:each="user : ${users}"><a th:href="@{/match(id=${user.id})}"> [[${user.name}]]</a></li>
+  </ul>
+  </div>
+  </p>
 
-    <div th:each="chamber,stat:${usedata}">
+
+
+    <!-- <div th:each="users,stat:${users}">
+       <div th:each="users,stat:${users}"></div>
       <tr>
         <td>Index:[[${stat.index}]]</td>
         <td>ID:[[${users.id}]]</td>
         <td>ユーザ名:[[${users.name}]]</td>
       </tr>
-    </div>
+    </div> -->
 
-  <div th:if="${room}">
-    <ul>
-      <!--roomオブジェクトのroomNoというフィールドを指定している-->
-      <!--eachは所謂for each．この場合roomオブジェクトのusersフィールドにあるすべてのデータを一通り表示する
-        thが指定されているので[]が不要になる-->
-      <li th:each="user : ${room.users}">[[${user}]]</li>
-    </ul>
-  </div>
+  <!-- <div th:if="${matches}">
+      <tr>
+        <td>Index:[[${stat.index}]]</td>
+        <td>ID:[[${matches.id}]]</td>
+        <td>[[${matches.user1}]]</td>
+      </tr>
+    </div> -->
+
+
+
+  <!--
   <form action="/janken" method="post">
     <div th:if="${User}">
       Hi![[${User}]]
@@ -40,16 +58,19 @@
     <a href="/jankengame/Cho">チョキ</a>
     <a href="/jankengame/Pa">パー</a>
 
-  </div>
-  <div th:if="${janResult}">
-    <!--thymeleafを利用してjavaから値を受けるとき，ModelMapの変数名を指定のとおりに囲むと良い-->
-    <!--Pathパラメータ-->
-    <p>あなたの手[[${janhand}]]</p>
+  </div> -->
+
+
+
+  <!-- <div th:if="${janResult}"> -->
+  <!--thymeleafを利用してjavaから値を受けるとき，ModelMapの変数名を指定のとおりに囲むと良い-->
+  <!--Pathパラメータ-->
+  <!-- <p>あなたの手[[${janhand}]]</p>
     <p>相手の手 グー</p>
     <p>結果[[${janResult}]]</p>
     <a href="/janken">もどる</a>
   </div>
-  </p>
+  </p> -->
 
 
 

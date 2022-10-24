@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/schema/security">
+</htmlxmlns:th>
+
+<body>
+    <div><a href="/logout">ログアウト</a></div>
+    <h1>Match</h1>
+    <h2>ほんだ V.S. CPU </h2>
+
+
+
+
+  <form action="/match" method="post">
+  </form>
+  <div>
+    <a href="/fight/Gu">グー</a>
+    <a href="/fight/Cho">チョキ</a>
+    <a href="/fight/Pa">パー</a>
+
+  </div>
+
+  <div th:if="${janResult}"> -->
+  <!--thymeleafを利用してjavaから値を受けるとき，ModelMapの変数名を指定のとおりに囲むと良い-->
+  <!--Pathパラメータ-->
+  <p>ほんだの手[[${janhand}]]</p>
+      <p>CPUの手 グー</p>
+      <p>結果[[${janResult}]]</p>
+      <a href="/match">もどる</a>
+    </div>
+    </p>
+</body>
+</html>

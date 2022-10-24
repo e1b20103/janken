@@ -1,3 +1,4 @@
+
 package oit.is.z1141.kaizi.janken.controller;
 
 import java.security.Principal;
@@ -10,11 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 //import oit.is.z1141.kaizi.janken.model.Janken;
-//import oit.is.z1141.kaizi.janken.model.Match;
-//import oit.is.z1141.kaizi.janken.model.MatchMapper;
+import oit.is.z1141.kaizi.janken.model.Match;
+import oit.is.z1141.kaizi.janken.model.MatchMapper;
 import oit.is.z1141.kaizi.janken.model.User;
 import oit.is.z1141.kaizi.janken.model.UserMapper;
 import oit.is.z1141.kaizi.janken.model.Entry;
@@ -25,11 +27,18 @@ import oit.is.z1141.kaizi.janken.model.Entry;
  * クラスの前に@Controllerをつけていると，HTTPリクエスト（GET/POSTなど）があったときに，このクラスが呼び出される
  */
 @Controller
-// @RequestMapping("/janken")
+@RequestMapping("/janken")
 public class JankenController {
   @Autowired
-   private Entry room;
+  private Entry room;
    UserMapper userMapper;
+   //MatchMapper matchMapper;
+  //// 消さない
+  // @GetMapping("janken")
+  // public String janken() {
+  // return "janken.html";
+  // }
+
   /**
    * パスパラメータ2つをGETで受け付ける 1つ目の変数をparam1という名前で，2つ目の変数をparam2という名前で受け取る
    * GETで受け取った2つの変数とsample22()の引数の名前が同じなため， 引数の前に @PathVariable と付けるだけで，パスパラメータの値を
@@ -44,7 +53,7 @@ public class JankenController {
    *
    */
 
-  @GetMapping("/jankengame/{hand}")//戻る
+  @GetMapping("/fight/{hand}")
   public String jankengame(@PathVariable String hand, ModelMap model) {
     // じゃんけんの実装方法自分の手は無視して1/3にする
     if (hand.equals("Gu")) {
@@ -64,7 +73,6 @@ public class JankenController {
       model.addAttribute("janResult", janResult);
       String janhand = "Cho";
       model.addAttribute("janhand", janhand);
-
     }
     if (hand.equals("Pa")) {
       String janResult = "勝ち";
@@ -72,9 +80,11 @@ public class JankenController {
       String janhand = "Pa";
       model.addAttribute("janhand", janhand);
     }
+    System.out.println("1234");
     // ModelMap型変数のmodelにtasuResult2という名前の変数で，tasuResultの値を登録する．
     // ここで値を登録するとthymeleafが受け取り，htmlで処理することができるようになる
-    return "janken.html";
+    //return "janken.html";
+    return "match.html";
   }
 
   /**
@@ -83,22 +93,22 @@ public class JankenController {
    * @return
    */
 
-
+  // //getmappingは必ず残す
   @GetMapping("/janken")
-  public String janken( Principal prin, ModelMap model) {
+  public String janken(Principal prin, ModelMap model) {
     String loginUser = prin.getName();
     Entry newRoom = new Entry();
     newRoom.addUser(loginUser);
     this.room.addUser(loginUser);
     model.addAttribute("room", this.room);
     model.addAttribute("new_room", newRoom);
-
-
     return "janken.html";
   }
 
-  @PostMapping("/janken")
-  public String janken(String name,Principal prin, ModelMap model) {
+   @PostMapping("/janken")
+  //@GetMapping("/janken")
+  @Transactional
+  public String janken(String name, Principal prin, ModelMap model) {
   String loginUser = prin.getName();
   Entry newRoom = new Entry();
   newRoom.addUser(loginUser);
@@ -106,16 +116,28 @@ public class JankenController {
   model.addAttribute("room", this.room);
   model.addAttribute("new_room", newRoom);
 
-  ArrayList<User> userdata = userMapper.selectAllByname(name);
-  model.addAttribute("user", userdata);
+  ArrayList<User> users = userMapper.selectAllByUserName(name);
+  model.addAttribute("users", users);
+  // System.out.println("1234");
 
-
-
-
-
+  // ArrayList<Match> matches = matchMapper.selectAllByMatch();
+  // model.addAttribute("matches", matches);
   return "janken.html";
   }
 
 
 
+  // @PostMapping("/janken")
+  // @Transactional
+  // public String janken(String name, Principal prin, ModelMap model) {
+  //   ArrayList<User> users = userMapper.selectAllByUserName(name);
+  //   model.addAttribute("users", users);
+  //   return "janken.html";
+  // }
+
+
+
+
 }
+// Bean
+// selectAllByUser

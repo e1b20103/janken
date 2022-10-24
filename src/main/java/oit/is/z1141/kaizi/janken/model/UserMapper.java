@@ -22,12 +22,12 @@ public interface UserMapper {
    *
    * @param user
    */
-  @Insert("INSERT INTO users (name) VALUES (#{name},#{name});")
+  @Insert("INSERT INTO users (name) VALUES (#{name});")
   @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
   void insertUser(User users);
 
   @Select("SELECT * from users where name = #{name}")
-  ArrayList<User> selectAllByname(String name);
+  ArrayList<User> selectAllByUserName(String name);
 
   /**
    * DBのカラム名とjavaクラスのフィールド名が同じ場合はそのまま代入してくれる（大文字小文字の違いは無視される）
@@ -35,14 +35,14 @@ public interface UserMapper {
    *
    * @return
    */
-  // @Select("SELECT users.name,users.name,matches.user1, from users JOIN matches ON user.name = name;")
+   @Select("SELECT users.name from users JOIN matches ON users.id = matches.id;")
   // /@Select("SELECT users.name,users.name,matches.user1, from users JOIN matches ON user.name = name;")
   // sqlを復習して正しく直す
   // めもchamber
 
-   ArrayList<User> selectAllByUser();
+   ArrayList<User> selectAllUser();
 
-  // @Insert("INSERT INTO user (id,name) VALUES (#{user},#{name});");
-  //void insertUser(User user);
+  //  @Insert("INSERT INTO matches (user1,user2,user1Hand,user2Hand) VALUES (#{user1},#{user2},#{user1Hand},#{user2Hand});")
+  // void insertUser(Match matches);
 
 }

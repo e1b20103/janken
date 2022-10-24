@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface MatchMapper {
 
-  @Select("SELECT id,name from users where id = #{id}")
+  @Select("SELECT id from users where id = #{id}")
   User selectById(int id);
 
   /**
@@ -23,12 +23,12 @@ public interface MatchMapper {
    *
    * @param user
    */
-  @Insert("INSERT INTO users (name) VALUES (#{name},#{name});")
+  @Insert("INSERT INTO match (user1) VALUES (#{user1},#{user1});")
   @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
-  void insertUser(User users);
+  void insertMatch(Match match);
 
-  @Select("SELECT * from users where name = #{name}")
-  ArrayList<User> selectAllByname(String name);
+  @Select("SELECT * from match where user1 = #{user1}")
+  ArrayList<Match> selectAllByuser1(int user1);
 
   /**
    * DBのカラム名とjavaクラスのフィールド名が同じ場合はそのまま代入してくれる（大文字小文字の違いは無視される）
@@ -42,7 +42,7 @@ public interface MatchMapper {
   // sqlを復習して正しく直す
   // めもchamber
 
-  ArrayList<User> selectAllByUser();
+  ArrayList<Match> selectAllByMatch();
 
   // @Insert("INSERT INTO userinfo (userName,age,height) VALUES
   // (#{userName},#{age},#{height});")
